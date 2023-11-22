@@ -1,6 +1,6 @@
 {
   "name": "cli-react-component",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A cli tool to create react component",
   "main": "createComponent.ts",
   "scripts": {
