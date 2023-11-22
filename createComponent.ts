@@ -2,8 +2,8 @@
 import fs from "fs-extra";
 import yargs from "yargs";
 
-const createStyleComponent = (componentName: string) => {
-  const stylesDirectory = "app/styles";
+const createStyleComponent = (componentName: string, sourceDirectory: string) => {
+  const stylesDirectory = `${sourceDirectory}/styles`;
   const componentDirectory = `${stylesDirectory}/${componentName}`;
 
   // Création du répertoire "app/styles" s'il n'existe pas
@@ -30,11 +30,15 @@ const createStyleComponent = (componentName: string) => {
   // Création du répertoire du composant et ajout du fichier "${componentName}.scss"
   fs.ensureDirSync(componentDirectory);
   const contentComponent = `.${componentName} {
-        // code
+    .${componentName} {
+      // Code
     }
     `;
   fs.ensureFileSync(`${componentDirectory}/${componentName}.scss`);
-
+  fs.appendFileSync(
+    `${componentDirectory}/${componentName}.scss`,
+    contentComponent
+  );
   // Vérification et ajout de l'import du composant dans "import.scss"
   const importFilePath = `${stylesDirectory}/import.scss`;
   const importFileContent = fs.readFileSync(importFilePath, "utf8");
@@ -51,8 +55,8 @@ const createStyleComponent = (componentName: string) => {
   }
 };
 
-const createComponent = (componentName: string) => {
-  const componentsDirectory = "app/components";
+const createComponent = (componentName: string, sourceDirectory: string) => {
+  const componentsDirectory = `${sourceDirectory}/components`;
   const componentPath = `${componentsDirectory}/${componentName}.tsx`;
 
   // Création du répertoire "app/components" s'il n'existe pas
@@ -76,29 +80,30 @@ export default ${componentName};
   fs.writeFileSync(componentPath, content);
 
   console.log(
-    `Le composant ${componentName} a été créé avec succès dans le répertoire ${componentsDirectory}!`
+    `the component ${componentName} has been created in ${componentPath}`
   );
 };
 
 const create = (componentName: string) => {
+  let sourceDirectory: string;
   //si il y a un src a la racine du projet on le notifie et on sort du programme
-  if (fs.existsSync("src")) {
-    console.log(
-      "Un dossier src existe déjà à la racine du projet pour le moment le cli prend que les dossiers app en racine"
-    );
-    //retourné un code d'erreur
-    //log de l'erreur de process
-    process.exit(1);
+  if (fs.existsSync("src") && fs.existsSync("app")) {
+    sourceDirectory = fs.existsSync("src") ? "src" : "app";
+  } else {
+//sinon on crée le dossier src
+    fs.ensureDirSync("src");
+    sourceDirectory = "src";
   }
-  createComponent(componentName);
-  createStyleComponent(componentName);
+
+  createComponent(componentName,sourceDirectory);
+  createStyleComponent(componentName,sourceDirectory);
 };
 
 // Gestion des arguments de la ligne de commande
 const argv = yargs
   .command(
     "create <componentName>",
-    "Crée un composant React",
+    "Create a component",
     (yargs: any) => {
       const componentName = yargs.argv._[1];
       const componentType = yargs.argv._[0];
