@@ -1,7 +1,7 @@
 {
   "name": "cli-react-component",
   "version": "0.0.6",
-  "description": "A cli tool to create react component",
+  "description": "A cli tool to create react component ",
   "main": "createComponent.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
