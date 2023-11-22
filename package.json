@@ -24,6 +24,6 @@
     "yargs": "^17.7.2"
   },
   "bin": {
-    "cli-react-component": "./createComponent.js"
+    "cli-react-component": "createComponent.ts"
   }
 }
