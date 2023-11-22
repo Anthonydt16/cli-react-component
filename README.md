@@ -15,7 +15,7 @@ npm install -g cli-react-component
 Pour crée un component voici la commande:
 
 ```bash
-ts-node createComponent.ts create [componentsName]
+npx cli-react-component create [nameComponent]
 ```
 
 Ensuite, le script va créer le dossier "app" s'il n'existe pas déjà, et à l'intérieur, il va créer les dossiers "styles" et "components". Ensuite, il ajoutera le fichier du composant en format TSX dans le dossier "components". Si le dossier "styles" n'existe pas, il le créera, ajoutera les fichiers "import.scss" et "settings.scss". Enfin, le script créera le dossier spécifique au composant avec le fichier .scss correspondant.
