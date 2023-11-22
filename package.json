@@ -2,17 +2,16 @@
   "name": "cli-react-component",
   "version": "0.0.3",
   "description": "A cli tool to create react component",
-  "main": "index.js",
+  "main": "createComponent.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node createComponent.ts",
+    "start": "node createComponent.js",
     "build": "npx tsc",
     "preinstall": "npm run build",
     "publish": "npm publish"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Anthony Douat",
+  "license": "MIT",
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.9.4",
@@ -25,5 +24,16 @@
   },
   "bin": {
     "cli-react-component": "./index.js"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anthonydt16/cli-react-component"
+  },
+  "homepage": "https://github.com/Anthonydt16/cli-react-component#readme",
+  "keywords": [
+    "cli",
+    "npmtool",
+    "reactTool",
+    "component"
+  ]
 }

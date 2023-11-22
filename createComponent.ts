@@ -83,8 +83,12 @@ export default ${componentName};
 const create = (componentName: string) => {
   //si il y a un src a la racine du projet on le notifie et on sort du programme
   if (fs.existsSync("src")) {
-    console.log("Un dossier src existe déjà à la racine du projet");
-    return;
+    console.log(
+      "Un dossier src existe déjà à la racine du projet pour le moment le cli prend que les dossiers app en racine"
+    );
+    //retourné un code d'erreur
+    //log de l'erreur de process
+    process.exit(1);
   }
   createComponent(componentName);
   createStyleComponent(componentName);
