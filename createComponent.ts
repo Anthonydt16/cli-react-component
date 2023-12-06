@@ -3,10 +3,14 @@ import fs from "fs-extra";
 import yargs from "yargs";
 import enquirer from "enquirer";
 
+/**
+ * the function createAtomicDesignComponent create the component in atomic design
+ * @param props the props of the component contains the name of the component, the type of the component, the architect type of the component and the type in atomic design of the component
+ * @param sourceDirectory the source directory of the project
+ */
 const createAtomicDesignComponent = (
   props: {
     componentName: string;
-    typeComponent: string;
     architectType: string;
     typeInAtomicDesign?: string;
   },
@@ -15,11 +19,7 @@ const createAtomicDesignComponent = (
   const componentsDirectory = `${sourceDirectory}/components`;
   const typeInAtomicDesignDirectory = `${componentsDirectory}/${props.typeInAtomicDesign}`;
   const componentPath = `${typeInAtomicDesignDirectory}/${props.componentName}.tsx`;
-
-  // Création du répertoire "app/components" s'il n'existe pas
   fs.ensureDirSync(componentsDirectory);
-
-  // Création du répertoire "app/components/${typeInAtomicDesign}" s'il n'existe pas
   fs.ensureDirSync(typeInAtomicDesignDirectory);
 
   const content = `
@@ -42,6 +42,11 @@ const createAtomicDesignComponent = (
   );
 };
 
+/**
+ * the function createStyleComponent create the style component
+ * @param componentName The name of the component to create
+ * @param sourceDirectory The source directory of the project
+ */
 const createStyleComponent = (
   componentName: string,
   sourceDirectory: string
@@ -49,10 +54,8 @@ const createStyleComponent = (
   const stylesDirectory = `${sourceDirectory}/styles`;
   const componentDirectory = `${stylesDirectory}/${componentName}`;
 
-  // Création du répertoire "app/styles" s'il n'existe pas
   fs.ensureDirSync(stylesDirectory);
 
-  // Ajout des fichiers "import.scss" et "settings.scss" s'ils n'existent pas
   const contentImport = `@import '../${stylesDirectory}/settings.scss';`;
   const contentSettings = `$color-primary: #000;
     body {
@@ -66,11 +69,9 @@ const createStyleComponent = (
   fs.ensureFileSync(`${stylesDirectory}/import.scss`);
   fs.ensureFileSync(`${stylesDirectory}/settings.scss`);
 
-  // Écriture du contenu dans les fichiers "import.scss" et "settings.scss" s'ils sont vides
   fs.appendFileSync(`${stylesDirectory}/import.scss`, contentImport);
   fs.appendFileSync(`${stylesDirectory}/settings.scss`, contentSettings);
 
-  // Création du répertoire du composant et ajout du fichier "${componentName}.scss"
   fs.ensureDirSync(componentDirectory);
   const contentComponent = `.${componentName} {
     .${componentName} {
@@ -82,7 +83,6 @@ const createStyleComponent = (
     `${componentDirectory}/${componentName}.scss`,
     contentComponent
   );
-  // Vérification et ajout de l'import du composant dans "import.scss"
   const importFilePath = `${stylesDirectory}/import.scss`;
   const importFileContent = fs.readFileSync(importFilePath, "utf8");
 
@@ -98,11 +98,15 @@ const createStyleComponent = (
   }
 };
 
+/**
+ * the function createComponent create the component in components classic
+ * @param componentName the name of the component to create
+ * @param sourceDirectory the source directory of the project
+ */
 const createComponent = (componentName: string, sourceDirectory: string) => {
   const componentsDirectory = `${sourceDirectory}/components`;
   const componentPath = `${componentsDirectory}/${componentName}.tsx`;
 
-  // Création du répertoire "app/components" s'il n'existe pas
   fs.ensureDirSync(componentsDirectory);
 
   const content = `
@@ -119,7 +123,6 @@ const ${componentName} = () => {
 export default ${componentName};
 `;
 
-  // Écriture du contenu dans le fichier "${componentName}.tsx"
   fs.writeFileSync(componentPath, content);
 
   console.log(
@@ -127,18 +130,19 @@ export default ${componentName};
   );
 };
 
+/**
+ * the function create create the component
+ * @param props the props of the component contains the name of the component, the type of the component, the architect type of the component and the type in atomic design of the component
+ */
 const create = (props: {
   componentName: string;
-  typeComponent: string;
   architectType: string;
   typeInAtomicDesign?: string;
 }) => {
   let sourceDirectory: string;
-  //si il y a un src a la racine du projet on le notifie et on sort du programme
   if (fs.existsSync("src") && fs.existsSync("app")) {
     sourceDirectory = fs.existsSync("src") ? "src" : "app";
   } else {
-    //sinon on crée le dossier src
     fs.ensureDirSync("src");
     sourceDirectory = "src";
   }
@@ -157,21 +161,15 @@ const create = (props: {
   createStyleComponent(props.componentName, sourceDirectory);
 };
 
+/**
+ * the function askQuestions ask the questions to create the component
+ */
 const askQuestions = () => {
   const questions = [
     {
       type: "input",
       name: "componentName",
       message: "What is the name of the component?",
-    },
-    {
-      type: "select",
-      name: "typeComponent",
-      message: "What is the type of the component?",
-      choices: [
-        { message: "Class", value: "class" },
-        { message: "Function", value: "function" },
-      ],
     },
     {
       type: "select",
@@ -185,7 +183,6 @@ const askQuestions = () => {
   ];
 
   enquirer.prompt(questions).then(async (answers: any) => {
-    // Si le type d'architecture est "Atomic Design", ajoutez la question supplémentaire
     if (answers.architectType === "atomic") {
       const additionalQuestion = await enquirer.prompt({
         type: "select",

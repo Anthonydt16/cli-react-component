@@ -1,7 +1,7 @@
 {
   "name": "cli-react-component",
-  "version": "0.1.0",
-  "description": "A cli tool to create react component ",
+  "version": "0.1.1",
+  "description": "A cli tool to create react component with Atomic Design and style SCSS",
   "main": "createComponent.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
