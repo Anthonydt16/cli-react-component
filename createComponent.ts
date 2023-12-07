@@ -155,7 +155,7 @@ const createAtomicDesignComponentStyle = (
   fs.ensureFileSync(`${stylesDirectory}/import.scss`);
   fs.ensureFileSync(`${stylesDirectory}/settings.scss`);
   //Vérifier que le fichier import.scss contient bien le fichier settings.scss
-  const contentImport = `@import '../${stylesDirectory}/settings.scss';`;
+  const contentImport = `@import './settings.scss';`;
   const contentSettings = `$color-primary: #000;
     body {
         height: 100vh;
