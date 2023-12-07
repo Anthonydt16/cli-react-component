@@ -151,7 +151,23 @@ const createAtomicDesignComponentStyle = (
     `;
   // Écriture du contenu dans le fichier "${componentName}.tsx"
   fs.writeFileSync(componentPath, content);
-
+  //Vérifier qu'il y a bien un fichier import.scss et settings.scss sinon les créer
+  fs.ensureFileSync(`${stylesDirectory}/import.scss`);
+  fs.ensureFileSync(`${stylesDirectory}/settings.scss`);
+  //Vérifier que le fichier import.scss contient bien le fichier settings.scss
+  const contentImport = `@import '../${stylesDirectory}/settings.scss';`;
+  const contentSettings = `$color-primary: #000;
+    body {
+        height: 100vh;
+        width: 100vw;
+        margin: 0;
+        padding: 0;
+        background-color: $color-primary;
+    }
+    `;
+  fs.appendFileSync(`${stylesDirectory}/import.scss`, contentImport);
+  fs.appendFileSync(`${stylesDirectory}/settings.scss`, contentSettings);
+  //Vérifier que le fichier import.scss contient bien le fichier ${componentName}.scss
   const importFilePath = `${stylesDirectory}/import.scss`;
   const importFileContent = fs.readFileSync(importFilePath, "utf8");
 
