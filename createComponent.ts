@@ -130,6 +130,47 @@ export default ${componentName};
   );
 };
 
+const createAtomicDesignComponentStyle = (
+  props: {
+    componentName: string;
+    architectType: string;
+    typeInAtomicDesign?: string;
+  },
+  sourceDirectory: string
+) => {
+  const stylesDirectory = `${sourceDirectory}/styles`;
+  const typeInAtomicDesignDirectory = `${stylesDirectory}/${props.typeInAtomicDesign}`;
+  const componentPath = `${typeInAtomicDesignDirectory}/${props.componentName}.scss`;
+  fs.ensureDirSync(stylesDirectory);
+  fs.ensureDirSync(typeInAtomicDesignDirectory);
+
+  const content = `
+    .${props.componentName} {
+        
+    }
+    `;
+  // Écriture du contenu dans le fichier "${componentName}.tsx"
+  fs.writeFileSync(componentPath, content);
+
+  const importFilePath = `${stylesDirectory}/import.scss`;
+  const importFileContent = fs.readFileSync(importFilePath, "utf8");
+
+  if (
+    !importFileContent.includes(
+      `@import './${props.typeInAtomicDesign}/${props.componentName}.scss';`
+    )
+  ) {
+    fs.appendFileSync(
+      importFilePath,
+      `\n@import './${props.typeInAtomicDesign}/${props.componentName}.scss';\n`
+    );
+  }
+
+  console.log(
+    `the component ${props.componentName} has been created in ${componentPath}`
+  );
+};
+
 /**
  * the function create create the component
  * @param props the props of the component contains the name of the component, the type of the component, the architect type of the component and the type in atomic design of the component
@@ -150,6 +191,7 @@ const create = (props: {
   if (props.architectType === "atomic") {
     if (props.typeInAtomicDesign) {
       createAtomicDesignComponent(props, sourceDirectory);
+      createAtomicDesignComponentStyle(props, sourceDirectory);
     } else {
       throw new Error(
         "You must specify the type in atomic design of the component"
@@ -157,8 +199,8 @@ const create = (props: {
     }
   } else {
     createComponent(props.componentName, sourceDirectory);
+    createStyleComponent(props.componentName, sourceDirectory);
   }
-  createStyleComponent(props.componentName, sourceDirectory);
 };
 
 /**
